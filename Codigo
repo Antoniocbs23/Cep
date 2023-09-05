@@ -1,0 +1,148 @@
+package cep;
+
+import java.awt.Cursor;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.Iterator;
+
+import javax.swing.AbstractButton;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+import Atxy2k.CustomTextField.RestrictedTextField;
+
+@SuppressWarnings("serial")
+public class Cep extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField txtCep;
+	private JTextField textEndereco;
+	private JTextField textBairro;
+	private JTextField textCidade;
+	private JComboBox cboUf;
+	private JLabel lblStatus;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Cep frame = new Cep();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Cep() {
+		setTitle("Burcar Cep");
+		setResizable(false);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Cep.class.getResource("/img/icones/icones/home_2.png")));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JLabel lblNewLabel = new JLabel("CEP");
+		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		lblNewLabel.setBounds(21, 30, 54, 25);
+		contentPane.add(lblNewLabel);
+
+		txtCep = new JTextField();
+		txtCep.setBounds(55, 30, 117, 20);
+		contentPane.add(txtCep);
+		txtCep.setColumns(10);
+
+		JLabel lblNewLabel_1 = new JLabel("Endereço");
+		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		lblNewLabel_1.setBounds(10, 62, 65, 25);
+		contentPane.add(lblNewLabel_1);
+
+		textEndereco = new JTextField();
+		textEndereco.setBounds(80, 63, 330, 25);
+		contentPane.add(textEndereco);
+		textEndereco.setColumns(10);
+
+		JLabel lblNewLabel_2 = new JLabel("Bairro");
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		lblNewLabel_2.setBounds(10, 109, 65, 20);
+		contentPane.add(lblNewLabel_2);
+
+		textBairro = new JTextField();
+		textBairro.setBounds(80, 108, 330, 25);
+		contentPane.add(textBairro);
+		textBairro.setColumns(10);
+
+		JLabel lblNewLabel_3 = new JLabel("Cidade");
+		lblNewLabel_3.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		lblNewLabel_3.setBounds(10, 159, 54, 25);
+		contentPane.add(lblNewLabel_3);
+
+		textCidade = new JTextField();
+		textCidade.setBounds(80, 160, 213, 25);
+		contentPane.add(textCidade);
+		textCidade.setColumns(10);
+
+		JLabel lblNewLabel_4 = new JLabel("UF");
+		lblNewLabel_4.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		lblNewLabel_4.setBounds(310, 165, 45, 13);
+		contentPane.add(lblNewLabel_4);
+
+		cboUf = new JComboBox();
+		cboUf.setModel(new DefaultComboBoxModel(
+				new String[] { "", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA",
+						"PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
+		cboUf.setBounds(352, 162, 45, 21);
+		contentPane.add(cboUf);
+
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpar();
+			}
+		});
+		btnLimpar.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		btnLimpar.setBounds(10, 215, 85, 21);
+		contentPane.add(btnLimpar);
+
+		JButton btnCep = new JButton("Buscar");
+		btnCep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (txtCep.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Informe o CEP");
+					txtCep.requestFocus();
+				} else {
+					buscarCep();
+				}
+			}
+		});
+		btnCep.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		btnCep.setBounds(193, 30, 85, 21);
+		contentPane.add(btnCep);
